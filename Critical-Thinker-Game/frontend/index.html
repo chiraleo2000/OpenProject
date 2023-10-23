@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Critical Thinker: Real Events Challenge</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<h2>Critical Thinker: Real Events Challenge</h2>
+
+<button onclick="getQuestion()">Get a Question</button>
+
+<div id="questionDiv" style="display:none;">
+    <p id="questionText"></p>
+    <textarea id="answerText" rows="4" cols="50"></textarea><br><br>
+    <button onclick="submitAnswer()">Submit Answer</button>
+</div>
+
+<div id="feedbackDiv" style="display:none;">
+    <p id="feedbackText"></p>
+</div>
+
+<script>
+    function getQuestion() {
+        $.get('/get_question', function(data) {
+            $('#questionText').text(data.question_text);
+            $('#questionDiv').show();
+            $('#feedbackDiv').hide();
+        });
+    }
+
+    function submitAnswer() {
+        const answer = $('#answerText').val();
+        $.post('/submit_answer', {answer: answer}, function(data) {
+            $('#feedbackText').text(data.feedback + " You scored: " + data.score);
+            $('#feedbackDiv').show();
+            $('#questionDiv').hide();
+        });
+    }
+</script>
+
+</body>
+</html>
